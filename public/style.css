@@ -1,0 +1,19 @@
+
+@font-face {
+    font-family: "FuturaPT-Bold";
+    src: local("FuturaPT-Bold"), url("./fonts/FuturaPT-Bold.woff2") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "FuturaPT-Medium";
+    src: local("FuturaPT-Medium"), url("./fonts/FuturaPT-Medium.woff2") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "FuturaPT-Demi";
+    src: local("FuturaPT-Demi"), url("./fonts/FuturaPT-Demi.woff2") format("truetype");
+    font-weight: 600;
+}
+
