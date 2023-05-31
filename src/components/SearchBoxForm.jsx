@@ -2,15 +2,17 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import useDebounce from "../hooks/useDebounce";
 
 import {useSearchCoinMutation} from "../redux/table/tableApiSlice";
-import {getProfitAmount, getProfitPercectAmount} from "../redux/table/tableSlice";
+import {getProfitAmount, getProfitPercectAmount, getInvestingPeriod, getProfitSelector} from "../redux/table/tableSlice";
 
 import SearchBoxItem from '../components/SearchBoxItem';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
 const SearchBoxForm = () => {
     const dispatch  = useDispatch()
+    const profit = useSelector(getProfitSelector)
+
     const [searchCoin] = useSearchCoinMutation()
 
     
@@ -19,9 +21,10 @@ const SearchBoxForm = () => {
 
     const [search, setSearch] = useState('')
     const [cryptoAmount, setCryptoAmount] = useState(0)
+    const [investingPeriod, setInvestingPeriod] = useState(1)
+
     const [resultSearch, setResultSearch] = useState([])
     const [cursor, setCursor] = useState(-1);
-    const [hashTags, setHashTages] = useState([])
 
     const filteredCoins = useMemo(() => {
         if (!search) {
@@ -63,6 +66,11 @@ const SearchBoxForm = () => {
         setCryptoAmount(event.target.value)
         dispatch(getProfitAmount(event.target.value))
     }
+
+    const InvestingPeriodChange = (event) => {
+        setInvestingPeriod(event.target.value)
+        dispatch(getInvestingPeriod(profit *event.target.value))
+    }
     const debouncedSearch = useDebounce(handleSearch, 0)
 
     const onPressArrowkey =(event) => {
@@ -83,11 +91,12 @@ const SearchBoxForm = () => {
     return ( 
     <section className="page__main-title main-title container">
         <div className="" style={{marginBottom:"30px"}}>
+        <h3>Amount</h3>
         <input 
             value={cryptoAmount} 
             onChange={onAmoutChange} 
             type="number" 
-            name="a" 
+            name="amount" 
             step={1000}
             min={1000}
             max={1000000}
@@ -97,14 +106,14 @@ const SearchBoxForm = () => {
         />
         </div>
     <div className={`main-title__search search ${search.length ? 'dropdown-open' : null}`} ref={searchContainerRef}>
+
         <input 
             value={search} 
             onChange={onChange} 
             type="text" 
-            name="search" 
+            name="amount" 
             className="search__input"
-            placeholder={'Enter cryptocyrrency'}
-            onKeyDown={(e) =>onPressArrowkey(e)}
+            placeholder={'Enter cryptocyrrency amount'}
         />
         <div className="search__placeholder">
             <picture>
@@ -134,6 +143,20 @@ const SearchBoxForm = () => {
 
 
         </div>
+    </div>
+    <div style={{marginTop:"60px"}}>
+        <h3>Investing period</h3>
+    <input 
+            value={investingPeriod} 
+            onChange={InvestingPeriodChange} 
+            step={3}
+            min={0}
+            max={24}
+            type="number" 
+            name="investing" 
+            className="search__input"
+            placeholder={'Enter investing period'}
+        />
     </div>
 </section>  );
 }
