@@ -2,17 +2,15 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import useDebounce from "../hooks/useDebounce";
 
 import {useSearchCoinMutation} from "../redux/table/tableApiSlice";
-import {getProfitAmount, getProfitPercectAmount, getInvestingPeriod, getProfitSelector} from "../redux/table/tableSlice";
+import {getProfitAmount, getProfitPercectAmount, getInvestingPeriod} from "../redux/table/tableSlice";
 
 import SearchBoxItem from '../components/SearchBoxItem';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 
 
 const SearchBoxForm = () => {
     const dispatch  = useDispatch()
-    const profit = useSelector(getProfitSelector)
-
     const [searchCoin] = useSearchCoinMutation()
 
     
@@ -30,7 +28,6 @@ const SearchBoxForm = () => {
         if (!search) {
             return resultSearch
         }
-        dispatch(getProfitAmount(search))
         resultSearch.map(searchResult =>  {
             if( searchResult.name.toLowerCase().includes(search.toLowerCase())) {
                 dispatch(getProfitAmount(searchResult.price))
@@ -69,7 +66,7 @@ const SearchBoxForm = () => {
 
     const InvestingPeriodChange = (event) => {
         setInvestingPeriod(event.target.value)
-        dispatch(getInvestingPeriod(profit *event.target.value))
+        dispatch(getInvestingPeriod(event.target.value))
     }
     const debouncedSearch = useDebounce(handleSearch, 0)
 
